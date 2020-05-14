@@ -1,5 +1,5 @@
 #!bin/bash
-#Ver1.1
+#Ver1.2
 #Date 2020/05/14
 NGINX="nginx"
 UL="/usr/local"
@@ -38,7 +38,7 @@ fi
 echo "配置与检测完成，开始编译安装"
 sleep 1
 
-./configure --prefix=/usr/local/nginx --with-http_ssl_module --with-debug
+./configure --prefix=/usr/local/nginx --with-http_ssl_module
 make
 make install
 sleep 1
