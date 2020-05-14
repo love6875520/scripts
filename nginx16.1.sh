@@ -29,19 +29,7 @@ if [ $? -ne 0 ]; then
     yum install gcc-c++ -y
 fi
 
-rpm -qa | grep pcre -w
-                
-if [ $? -ne 0 ]; then
-    yum install pcre pcre-devel -y
-fi
-
-rpm -qa | grep zlib -w
-                
-if [ $? -ne 0 ]; then
-    yum install zlib zlib-devel -y
-fi
-
-rpm -qa | grep openssl  -w
+rpm -qa | grep openssl-devel  -w
                 
 if [ $? -ne 0 ]; then
     yum install openssl openssl-devel -y
