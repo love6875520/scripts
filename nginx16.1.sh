@@ -74,7 +74,8 @@ sleep 1
 chmod 754 /usr/lib/systemd/system/nginx.service
 systemctl daemon-reload
 systemctl enable nginx
-echo "NGINX安装配置完成，使用systemctl start nginx来启动。
+echo "NGINX安装配置完成，已配置自启动和SSL模块
+请使用systemctl start nginx来启动
 工作目录/usr/local/nginx
 配置文件/usr/local/nginx/conf
 日志文件/usr/local/nginx/logs"
