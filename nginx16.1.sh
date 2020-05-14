@@ -51,3 +51,24 @@ sleep 1
 ./configure --prefix=/usr/local/nginx --with-http_ssl_module --with-debug
 make
 make install
+sleep 1
+echo "编译完成，开始注册系统服务"
+touch /usr/lib/systemd/system/nginx.service
+echo "[Unit]" >> /usr/lib/systemd/system/nginx.service
+echo "Description=The NGINX HTTP and reverse proxy server" >> /usr/lib/systemd/system/nginx.service
+echo "After=syslog.target network.target remote-fs.target nss-lookup.target" >> /usr/lib/systemd/system/nginx.service
+echo "[Service]" >> /usr/lib/systemd/system/nginx.service
+echo "Type=forking" >> /usr/lib/systemd/system/nginx.service
+echo "PIDFile=/usr/local/nginx/logs/nginx.pid" >> /usr/lib/systemd/system/nginx.service
+echo "ExecStartPre=/usr/local/nginx/sbin/nginx -t" >> /usr/lib/systemd/system/nginx.service
+echo "ExecStart=/usr/local/nginx/sbin/nginx" >> /usr/lib/systemd/system/nginx.service
+echo "ExecReload=/usr/local/nginx/sbin/nginx -s reload" >> /usr/lib/systemd/system/nginx.service
+echo "ExecStop=/bin/kill -s QUIT $MAINPID" >> /usr/lib/systemd/system/nginx.service
+echo "PrivateTmp=true" >> /usr/lib/systemd/system/nginx.service
+echo "[Install]" >> /usr/lib/systemd/system/nginx.service
+echo "WantedBy=multi-user.target" >> /usr/lib/systemd/system/nginx.service
+sleep 1
+chmod 754 /usr/lib/systemd/system/nginx.service
+systemctl daemon-reload
+systemctl enable nginx
+echo "NGINX安装配置完成，使用systemctl start nginx来启动"
