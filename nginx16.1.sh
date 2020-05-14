@@ -1,5 +1,6 @@
 #!bin/bash
-#V1.0
+#Ver1.0
+#Date 2020-05-14
 NGINX="nginx"
 UL="/usr/local"
 NGINXDIR="/usr/local/nginx"
@@ -51,3 +52,4 @@ sleep 1
 ./configure --prefix=/usr/local/nginx --with-http_ssl_module --with-debug
 make
 make install
+echo "NGINX已安装并配置完成"
