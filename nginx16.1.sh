@@ -4,6 +4,7 @@
 NGINX="nginx"
 UL="/usr/local"
 NGINXDIR="/usr/local/nginx"
+NGINXCONF="/usr/local/nginx/conf"
 echo "开始下载源码并解压"
 sleep 1
 rpm -qa | grep wget -w
@@ -68,8 +69,12 @@ echo "ExecStop=/bin/kill -s QUIT $MAINPID" >> /usr/lib/systemd/system/nginx.serv
 echo "PrivateTmp=true" >> /usr/lib/systemd/system/nginx.service
 echo "[Install]" >> /usr/lib/systemd/system/nginx.service
 echo "WantedBy=multi-user.target" >> /usr/lib/systemd/system/nginx.service
+cp $NGINXCONF/nginx.conf $NGINXCONF/nginx.conf.bak
 sleep 1
 chmod 754 /usr/lib/systemd/system/nginx.service
 systemctl daemon-reload
 systemctl enable nginx
-echo "NGINX安装配置完成，使用systemctl start nginx来启动"
+echo "NGINX安装配置完成，使用systemctl start nginx来启动。
+工作目录/usr/local/nginx
+配置文件/usr/local/nginx/conf
+日志文件/usr/local/nginx/logs"
