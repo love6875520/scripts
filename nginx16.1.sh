@@ -1,5 +1,6 @@
 #!bin/bash
-#V1.0
+#Ver1.1
+#Date 2020/05/14
 NGINX="nginx"
 UL="/usr/local"
 NGINXDIR="/usr/local/nginx"
