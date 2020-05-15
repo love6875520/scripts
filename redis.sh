@@ -65,13 +65,34 @@ echo "---------依赖配置与检测完成---------"
 sleep 1
 echo "---------开始安装Redis---------"
 tar -xf $REDIS/redis.tar.gz -C $REDIS
+echo "请选择本机安装类型：集群模式master输入1、集群模式slave输入2，单机模式请输入3"
+read mode
+
+until (( "$mode" < 4 ))
+do
+  if [ $mode -gt 3 ];then
+    echo "输入错误，请重新输入"
+    read mode
+  fi
+done
+
+if [ $mode -eq 1 ];then
+    cp redis-master.conf $REDIS_PATH/redis.conf
+    cp sentinel.conf $REDIS_PATH
+elif [ $mode -eq 2 ];then
+    cp redis-slave.conf $REDIS_PATH/redis.conf
+    cp sentinel.conf $REDIS_PATH
+elif [ $mode -eq 3 ];then
+    cp redis-single.conf $REDIS_PATH/redis.conf
+fi
+
 cd $REDIS_DIR
 make install PREFIX=$REDIS_DIR
 sleep 10
 echo "---------正在进行最后配置---------"
 mkdir $REDIS_PATH
 mkdir $REDIS_DIR/log
-cp -r $REDIS_DIR/redis.conf $REDIS_PATH
-        if [ -e "$REDIS_PATH/redis.conf" ]; then
-                echo "---------Redis安装完毕---------"
-        fi
+
+if [ -d "$REDIS_PATH/log" ]; then
+       echo "---------Redis安装完毕---------"
+fi
