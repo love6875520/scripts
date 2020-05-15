@@ -9,9 +9,12 @@ RPMPATH="/usr/local/redisrpm"
 REDIS_DIR="/usr/local/redis"
 
 useradd -r redis
-mkdir -p $RPMPATH
 mv redis.tar.gz $REDIS
 mv rpm4redis.tar $REDIS
+mv redis-master.conf $REDIS
+mv redis-slave.conf $REDIS
+mv redis-single.conf $REDIS
+mv sentinel.conf $REDIS
 tar -xf $REDIS/rpm4redis.tar -C $REDIS
 sleep 1
 
@@ -60,45 +63,43 @@ echo "---------开始进行依赖配置与检测---------"
         if [ $? -ne 0 ]; then
                 rpm -ivh --nodeps --force  $RPMPATH/gcc-c++-4.8.5-36.el7.x86_64.rpm
         fi
-sleep 3
-echo "---------依赖配置与检测完成---------"
 sleep 1
-echo "---------开始安装Redis---------"
+echo "---------检测完成，开始安装Redis---------"
+sleep 1
 tar -xf $REDIS/redis.tar.gz -C $REDIS
 cd $REDIS_DIR
 make install PREFIX=$REDIS_DIR
 sleep 3
-mkdir -p $REDIS_PATH/etc
+mkdir -p $REDIS_PATH
 mkdir $REDIS_DIR/log
 
-echo "请选择本机安装类型：集群模式master输入1、集群模式slave输入2，单机模式请输入3"
+echo "请选择本机安装类型：集群模式master输入1、集群模式slave输入2，单机模式输入0"
 read mode
 
-while [ $mode = 0 ]
+while [ $mode -gt 2 ]
 do
+  if [ $mode -gt 2 ];then
     echo "输入错误，请重新输入"
-    read mode
-done
-
-until [ $mode -lt 4 ]
-do
-  if [ $mode -gt 3 ];then
-    echo "输入错误，请重新输入"
+    echo "集群模式master输入1、集群模式slave输入2，单机模式输入0"
     read mode
   fi
 done
 
 if [ $mode -eq 1 ];then
-    cp redis-master.conf $REDIS_PATH/redis.conf
-    cp sentinel.conf $REDIS_PATH
+    cp $REDIS/redis-master.conf $REDIS_PATH/redis.conf
+    cp $REDIS/sentinel.conf $REDIS_PATH
 elif [ $mode -eq 2 ];then
-    cp redis-slave.conf $REDIS_PATH/redis.conf
-    cp sentinel.conf $REDIS_PATH
-elif [ $mode -eq 3 ];then
-    cp redis-single.conf $REDIS_PATH/redis.conf
+    cp $REDIS/redis-slave.conf $REDIS_PATH/redis.conf
+    cp $REDIS/sentinel.conf $REDIS_PATH
+elif [ $mode -eq 0 ];then
+    cp $REDIS/redis-single.conf $REDIS_PATH/redis.conf
 fi
 
 
 if [ -e "$REDIS_PATH/redis.conf" ]; then
-        echo "---------Redis安装完毕---------"
+        echo 
+        "---------Redis安装完毕---------
+        工作目录/usr/local/redis
+        配置文件/usr/local/redis/etc
+        日志文件/usr/local/redis/logs"
 fi
