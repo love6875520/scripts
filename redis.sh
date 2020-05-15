@@ -74,7 +74,7 @@ mkdir $REDIS_DIR/log
 echo "请选择本机安装类型：集群模式master输入1、集群模式slave输入2，单机模式请输入3"
 read mode
 
-until [ $mode = 0 ]
+while [ $mode = 0 ]
 do
     echo "输入错误，请重新输入"
     read mode
