@@ -1,4 +1,6 @@
 #!/bin/bash
+#Ver2.0
+#Date 2020/05/16
 #Redis配置文件目录
 REDIS_PATH="/usr/local/redis/etc"
 #Redis软件包目录
@@ -73,30 +75,27 @@ sleep 3
 mkdir -p $REDIS_PATH
 mkdir $REDIS_DIR/log
 
-echo "请选择本机安装类型：集群模式master输入1、集群模式slave输入2，单机模式输入0"
+echo "请选择本机安装类型：集群模式master输入1、集群模式slave输入2，单机模式敲回车"
 read mode
-
-while [ $mode -gt 2 ]
+until [ -z $mode ]
 do
-  if [ $mode -gt 2 ];then
-    echo "输入错误，请重新输入"
-    echo "集群模式master输入1、集群模式slave输入2，单机模式输入0"
-    read mode
-  fi
+        if [ $mode = 1 ];then
+                cp $REDIS/redis-master.conf $REDIS_PATH/redis.conf
+                cp $REDIS/sentinel.conf $REDIS_PATH
+        exit 0
+        elif [ $mode = 2 ];then
+                cp $REDIS/redis-slave.conf $REDIS_PATH/redis.conf
+                cp $REDIS/sentinel.conf $REDIS_PATH
+        exit 0
+        else
+                echo "输入错误，请重新输入"
+                echo "集群模式master输入1、集群模式slave输入2，单机模式敲回车"
+                read mode
+        fi
 done
+cp $REDIS/redis-single.conf $REDIS_PATH/redis.conf
 
-if [ $mode -eq 1 ];then
-    cp $REDIS/redis-master.conf $REDIS_PATH/redis.conf
-    cp $REDIS/sentinel.conf $REDIS_PATH
-elif [ $mode -eq 2 ];then
-    cp $REDIS/redis-slave.conf $REDIS_PATH/redis.conf
-    cp $REDIS/sentinel.conf $REDIS_PATH
-elif [ $mode -eq 0 ];then
-    cp $REDIS/redis-single.conf $REDIS_PATH/redis.conf
-fi
-
-
-if [ -e "$REDIS_PATH/redis.conf" ]; then
+if [ $? -qe 0 ]; then
         echo 
         "---------Redis安装完毕---------
         工作目录/usr/local/redis
