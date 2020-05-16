@@ -95,7 +95,7 @@ do
 done
 cp $REDIS/redis-single.conf $REDIS_PATH/redis.conf
 
-if [ $? -qe 0 ]; then
+if [ -e "$REDIS_PATH/redis.conf" ]; then
         echo 
         "---------Redis安装完毕---------
         工作目录/usr/local/redis
