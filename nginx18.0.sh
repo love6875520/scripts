@@ -11,7 +11,7 @@ rpm -qa | grep wget -w
 if [ $? -ne 0 ]; then
     yum install wget -y
 fi
-wget https://nginx.org/download/nginx-1.16.1.tar.gz
+wget https://nginx.org/download/nginx-1.18.0.tar.gz
 tar -zxf nginx-1.16.1.tar.gz
 if [ -e "./nginx-1.16.1" ]; then
     echo "文件下载并解压完成"
